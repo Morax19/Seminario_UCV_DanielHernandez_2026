@@ -133,7 +133,7 @@ $$\theta_{t + 1} = \theta_t - \alpha \cdot m_{t + 1}$$
 Siendo $m_t$ el momento (o momentum) del algoritmo calculado de manera recursiva, este término busca almacenar información de gradientes pasados al momento de actualizar el actual, el término $\beta$ se conoce como coeficiente de momento. Esto implica que el gradiente final es una suma ponderada de todos los gradientes anteriores, si los mismos están alineados en el tiempo (es decir, corresponden al mismo mínimo dentro de la función de pérdida) la tasa de aprendizaje va disminuyendo al aumentar el tiempo, por el contrario, si el algoritmo se comporta de manera irregular al momento de calcular los gradientes la tasa de aprendizaje aumenta.
 
 #### Adam
-Este enfoque busca solucionar problemas asociados a tener una tasa de aprendizaje estática y global, aquellos parámetros asociados con gradientes elevados sufren un ajuste mayor (lo que puede traer un comportamiento errático o no tan suave como se desea) y viceversa, parámetros que están asociados a gradientes de menor tamaño sufren ajustes no tan significativos.
+Este enfoque busca solucionar problemas asociados a tener una tasa de aprendizaje estática y global, tales como que aquellos parámetros asociados con gradientes elevados sufren un ajuste mayor (lo que puede traer un comportamiento errático o no tan suave como se desea) y viceversa, parámetros que están asociados a gradientes de menor tamaño sufren ajustes no tan significativos.
 
 ---
 
