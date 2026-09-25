@@ -61,7 +61,7 @@ Para un único dato de entrenamiento en un problema con $C$ clases posibles, la 
 $$L_{CE} = - \sum_{i=1}^{C} y_i \log(\hat{y}_i)$$
 
 #### Redes Neuronales
-Como se mencionó anteriormente, el mundo real se conforma de datos y problemas cuya complejidad supera la capacidad de procesamiento de algoritmos convencionales del aprendizaje automático, esta es la razón por la que surgen los modelos conocidos como redes neuronales, matemáticamente estos modelos constan de un conjunto de datos de entrada, un conjunto de pesos, un conjunto de sesgos y una función de activación. El proceso fundamental resulta en tomar cada uno de los datos del conjunto de entrada ($x_1, x_2, ..., x_n$), multiplicarlo por un elemento del conjunto de pesos ($w_1, w_2, ..., w_n$), el cual determina que tan importante es este dato en específico, sumarle un sesgo ($b_1, b_2, ..., b_n$). Finalmente, al resultado de esta operación se le aplica la función de activación ($f$) generando así una salida ($y$). De forma general el proceso es el siguiente:
+Como se mencionó anteriormente, el mundo real se conforma de datos y problemas cuya complejidad supera la capacidad de procesamiento de algoritmos convencionales del aprendizaje automático, esta es la razón por la que surgen los modelos conocidos como redes neuronales, matemáticamente estos modelos constan de un conjunto de datos de entrada, un conjunto de pesos, un conjunto de sesgos y una función de activación. El proceso fundamental resulta en tomar cada uno de los datos del conjunto de entrada ($x_1, x_2, \dots, x_n$), multiplicarlo por un elemento del conjunto de pesos ($w_1, w_2, \dots, w_n$), el cual determina que tan importante es este dato en específico, sumarle un sesgo ($b_1, b_2, \dots, b_n$). Finalmente, al resultado de esta operación se le aplica la función de activación ($f$) generando así una salida ($y$). De forma general el proceso es el siguiente:
 
 $$y = f \left(\sum_{i=1}^{n} (w_i \cdot x_i) + b_i\right)$$
 
@@ -198,7 +198,7 @@ En el año 2017, se publica el artículo "Attention Is All You Need" por investi
 **El Mecanismo de Autoatención**
 El mecanismo de autoatención permite a un modelo evaluar, durante el procesamiento de un token específico, la importancia y relación semántica que tienen todos los demás tokens de la secuencia de entrada respecto a él, sin importar la distancia física que los separe.
 
-Para lograr esto computacionalmente, el modelo toma el vector numérico que representa a cada token (conocido como embedding) y lo proyecta geométricamente en tres subespacios distintos multiplicándolo por tres matrices de pesos diferentes ($W^Q,W^K,W^V$), las cuales se ajustan dinámicamente durante el entrenamiento. Estas multiplicaciones generan tres nuevos vectores para cada token:
+Para lograr esto computacionalmente, el modelo toma el vector numérico que representa a cada token (conocido como embedding) y lo proyecta geométricamente en tres subespacios distintos multiplicándolo por tres matrices de pesos diferentes ($W^Q, W^K, W^V$), las cuales se ajustan dinámicamente durante el entrenamiento. Estas multiplicaciones generan tres nuevos vectores para cada token:
 
 *   **Vector Query (Q - Consulta):** Representa lo que el token actual está buscando en el resto de la secuencia para comprender su propio contexto.
 *   **Vector Key (K - Clave):** Representa el contenido del token, cumple la función de etiqueta de identificación o índice.
@@ -243,9 +243,9 @@ Habiendo finalizado el entrenamiento, la tarea de generación de texto se vuelve
 Durante su ciclo de vida, un LLM moderno pasa por el proceso de preentrenamiento en el cual el modelo procesa cuerpos de texto de gran tamaño extraídos de internet. Mediante algoritmos como Adam, se ajustan los miles de millones de parámetros para minimizar la pérdida de entropía cruzada en la predicción de tokens. Es así como el modelo extrae representaciones latentes profundas, internalizando la gramática, la lógica básica y un vasto conocimiento general del mundo.
 
 **Modelos de Código Abierto y Ejecución Local**
-En el contexto de los LLMs, suele confundirse el término “open-source” con “open-weights”, ya que en lugar de compartir el código fuente de la arquitectura del modelo, se liberan los pesos paramétricos resultantes del entrenamiento, de esta manera se facilita el acceso a LLMs altamente, entre los cuales destacan familias de modelos como Llama de Meta o Phi de Microsoft (Touvron et al., 2023).
+En el contexto de los LLMs, suele confundirse el término “open-source” con “open-weights”, ya que en lugar de compartir el código fuente de la arquitectura del modelo, se liberan los pesos paramétricos resultantes del entrenamiento, de esta manera se facilita el acceso a LLMs altamente capaces, entre los cuales destacan familias de modelos como Llama de Meta o Phi de Microsoft (Touvron et al., 2023).
 
-Estos modelos abiertos permiten el despliegue y la ejecución local de la inferencia en hardware privado. La principal ventaja de esto consiste en eliminar la dependencia de APIs de terceros, además de otorgar al usuario control sobre latencias y, primordialmente, asegura la privacidad absoluta y la confidencialidad de los datos analizadas por el sistema.
+Estos modelos abiertos permiten el despliegue y la ejecución local de la inferencia en hardware privado. La principal ventaja de esto consiste en eliminar la dependencia de APIs de terceros, además de otorgar al usuario control sobre latencias y, primordialmente, asegura la privacidad absoluta y la confidencialidad de los datos analizados por el sistema.
 
 #### Ventana de contexto e inferencia local
 La cantidad de información que un LLM puede observar, recordar y procesar simultáneamente en una sola iteración de inferencia está estrictamente limitada por un parámetro arquitectónico conocido como Ventana de Contexto.
@@ -278,15 +278,70 @@ El paradigma RAG fue introducido formalmente por Lewis et al. (2020), el mismo n
 
 El objetivo es recuperar únicamente los fragmentos de información relevantes para la consulta actual del usuario, y proveerlos al modelo como contexto temporal. Este proceso modular se divide tres fases:
 
-1.  **Indexación y Representación Vectorial (Indexing):** Antes de que el modelo pueda interactuar con el conocimiento externo, la información debe ser estructurada. Los documentos originales se dividen en fragmentos de texto más pequeños y manejables (conocidos en inglés como chunks), que luego se pasan a un modelo de incrustación (Embedding Model) que los transforma en un vector numérico denso de alta dimensionalidad que encapsula el significado semántico del texto. Finalmente, estos se almacenan en una base de datos vectorial.
-2.  **Recuperación (Retrieval):** Cuando el sistema recibe una consulta de entrada, esta se transforma utilizando el mismo modelo de embedding, generando un "vector de consulta". El sistema de recuperación calcula entonces la similitud geométrica entre el vector de consulta y todos los vectores almacenados en la base de datos. El algoritmo extrae y devuelve los fragmentos que tengan la mayor cercanía, lo que se traduce en la información semánticamente más relevante para resolver la tarea.
-3.  **Generación Aumentada (Generation):** Finalmente, los fragmentos de texto recuperados se concatenan estructuradamente junto con la petición original del usuario. Esta nueva petición se inyecta en la ventana de contexto del LLM que, al contar con la información precisa, filtrada y altamente relevante, utiliza su mecanismo de autoatención para analizar el contexto provisto y generar una respuesta fundamentada. Este proceso reduce la probabilidad de generar alucinaciones (afirmaciones estadísticamente probables pero fácticamente incorrectas).
+1.  **Indexación y Representación Vectorial:** Antes de que el modelo pueda interactuar con el conocimiento externo, la información debe ser estructurada. Los documentos originales se dividen en fragmentos de texto más pequeños y manejables (conocidos en inglés como chunks), que luego se pasan a un modelo de incrustación (Embedding Model) que los transforma en un vector numérico denso de alta dimensionalidad que encapsula el significado semántico del texto. Finalmente, estos se almacenan en una base de datos vectorial.
+2.  **Recuperación:** Cuando el sistema recibe una consulta de entrada, esta se transforma utilizando el mismo modelo de embedding, generando un "vector de consulta". El sistema de recuperación calcula entonces la similitud geométrica entre el vector de consulta y todos los vectores almacenados en la base de datos. El algoritmo extrae y devuelve los fragmentos que tengan la mayor cercanía, lo que se traduce en la información semánticamente más relevante para resolver la tarea.
+3.  **Generación Aumentada:** Finalmente, los fragmentos de texto recuperados se concatenan estructuradamente junto con la petición original del usuario. Esta nueva petición se inyecta en la ventana de contexto del LLM que, al contar con la información precisa, filtrada y altamente relevante, utiliza su mecanismo de autoatención para analizar el contexto provisto y generar una respuesta fundamentada. Este proceso reduce la probabilidad de generar alucinaciones.
+
+#### Agentes
+El concepto de Agente en la Inteligencia Artificial moderna transforma al LLM de un simple generador de texto en un motor de razonamiento capaz de interactuar con su entorno. Un agente impulsado por un LLM se define formalmente como un sistema autónomo que utiliza el modelo de lenguaje como su unidad de control central para percibir el contexto, planificar una secuencia de acciones, ejecutar herramientas externas y evaluar los resultados para alcanzar un objetivo (Wang et al., 2023).
+
+Desde el punto de vista de arquitectura, un agente está compuesto de tres pilares:
+1.  **Planificación y Razonamiento:** Se entiende como la capacidad de descomponer una tarea compleja en subtareas más pequeñas. Para conseguirlo se implementan técnicas de razonamiento explícito como Chain-of-Thought o ReAct, donde el modelo genera verbalmente sus pensamientos antes de tomar una decisión.
+2.  **Memoria:** Está divido en memoria a corto plazo, que corresponde al contexto de la conversación actual manejado por la ventana de contexto y memoria a largo plazo, almacenamiento y recuperación de información histórica, generalmente implementado mediante bases de datos vectoriales.
+3.  **Uso de Herramientas (Tool-use o Function Calling):** Es la característica que separa a un agente de un LLM tradicional, el modelo es entrenado para comprender firmas de funciones como APIs, intérpretes de código, motores de búsqueda. Cuando el modelo determina que carece de la información necesaria para responder, detiene la generación de texto, emite un comando estructurado para invocar una herramienta externa, espera el resultado de dicha ejecución y luego integra esa nueva información en su razonamiento.
+
+#### RAG Agéntico
+Si bien el proceso de Generación Aumentada por Recuperación es efectivo para mitigar alucinaciones y superar el límite de contexto, presenta una limitación estructural: es un proceso lineal y determinista que consta de recuperar, inyectar y generar. En el Naive RAG, el sistema siempre realiza una búsqueda vectorial en la base de datos, independientemente de si la consulta del usuario lo requiere, y el LLM está forzado a responder basándose en los fragmentos recuperados, incluso si estos resultan irrelevantes o insuficientes.
+
+Se propone como mejora lo que se conoce como el RAG Agéntico. Esta arquitectura fusiona las capacidades de razonamiento y uso de herramientas de un agente autónomo con el sistema de recuperación de información.
+
+En lugar de ejecutar una búsqueda vectorial de manera obligatoria y secuencial, el sistema provee al LLM de la base de datos vectorial como si fuera una herramienta a su disposición. El flujo operativo se convierte en:
+
+1.  **Evaluación de necesidad:** Al recibir una consulta, el agente evalúa si puede responder con su conocimiento interno o si requiere información externa. Si decide que necesita contexto, formula una consulta optimizada específicamente a la base de datos.
+2.  **Evaluación de relevancia:** Una vez que la base de datos devuelve los fragmentos de información, el agente actúa como un filtro, ya que, lee los fragmentos y determina si realmente contienen la respuesta a la pregunta.
+3.  **Iteración:** Si el agente determina que la información recuperada es insuficiente o tangencial, es capaz de decidir de forma autónoma reformular su consulta de búsqueda y ejecutar la herramienta nuevamente, iterando este proceso hasta recopilar el contexto necesario o alcanzar un límite de intentos.
+4.  **Síntesis:** Solo cuando el agente está satisfecho con la relevancia del contexto recuperado, procede a sintetizar la respuesta estructurada final.
+
+Este comportamiento iterativo e introspectivo permite a las arquitecturas de RAG Agéntico resolver consultas complejas que requieren saltos lógicos o agregación de información dispersa en múltiples documentos (Gao et al., 2023). Al proporcionarle al modelo la capacidad de evaluar la calidad de su propio contexto, se incrementa dramáticamente la precisión y la robustez de la extracción de información estructurada.
+
+#### Representación de Conocimiento
+Para que la información recuperada e interpretada por un modelo autónomo posea utilidad computacional, no es suficiente generar respuestas en lenguaje natural. Cuando se realizan soluciones orientadas a la automatización de procesos, al llenado de bases de datos, generación de código o interconexión con otros sistemas, se deben estructurar los resultados bajo un formato determinista e interoperable.
+
+La Representación del Conocimiento es una rama de la Inteligencia Artificial tradicional cuyo objetivo es diseñar formalismos que permitan a un sistema informático almacenar, procesar y razonar sobre información del mundo real. A diferencia de las representaciones latentes y distribuidas que emplea una red neuronal, que son inescrutables para los sistemas informáticos convencionales, la representación del conocimiento exige que la información sea explícita, simbólica y estructurada (Russell y Norvig, 2020; Davis, Shrobe y Szolovits, 1993).
+
+#### Ontologías Computacionales
+El estándar más riguroso para la estructuración de conocimiento es la Ontología. En el contexto de las ciencias de la computación, la misma se define como una "especificación explícita y formal de una conceptualización compartida" (Studer et al., 1998).
+
+De manera práctica, una ontología proporciona un vocabulario controlado y una estructura lógica para un dominio específico, definiendo:
+*   **Entidades:** Conceptos fundamentales que existen en un dominio.
+*   **Propiedades:** Las características que describen a dichas entidades.
+*   **Relaciones:** Las conexiones semánticas y jerárquicas entre las entidades.
+*   **Restricciones lógicas:** Reglas de validación que gobiernan los datos.
+
+Al incluir una ontología claramente definida en los ajustes del modelo, se delimita su espacio de razonamiento, de esa forma el agente deja de ser un generador de texto libre y asume el rol de un clasificador y extractor de entidades que debe mapear la información no estructurada para cumplir con las reglas definidas por la ontología.
+
+#### Grafos de Conocimiento (Knowledge Graphs)
+Desde la perspectiva de las estructuras de datos, un Grafo de Conocimiento es una red semántica que representa topológicamente la información. Matemáticamente, se define como un grafo dirigido $G=(V,E)$, en el que un conjunto de vértices $V$ representan a las entidades individuales definidas en la ontología y el conjunto de aristas $E$ representan las relaciones lógicas y semánticas que conectan a dichas entidades (Ehrlinger y Wöß, 2016).
+
+La unidad atómica de información dentro de un grafo de conocimiento se define como tripleta semántica y se define siguiendo la estructura: (Sujeto, Predicado, Objeto).
+
+**Sinergia entre Grafos de Conocimiento y LLMs (GraphRAG)**
+En las arquitecturas RAG, el sistema recupera fragmentos de texto basándose en la similitud espacial. Sin embargo, cuando se presentan consultas que requieren conectar información de múltiples fuentes este enfoque tiende a disminuir su eficacia.
+
+Una alternativa que busca dar solución a este comportamiento consiste en utilizar agentes basados en LLMs para construir y consultar Grafos de Conocimiento, dando lugar al paradigma GraphRAG (Generación Aumentada por Recuperación basada en Grafos). Ahora bien, la construcción de este grafo puede seguir dos enfoques principales:
+
+1.  **Extracción Abierta:** Se le otorga al modelo libertad total para analizar el texto y definir desde las entidades hasta sus relaciones basándose en su interpretación probabilística. Este enfoque resulta útil para el análisis exploratorio de datos desconocidos o bien para generar un boceto inicial, sin embargo, resulta ineficiente para implementaciones funcionales, ya que, dependiendo del rendimiento del modelo puede generar grafos altamente ruidosos, con sinónimos para una misma clase y relaciones ambiguas, imposibilitando la interoperabilidad con bases de datos estructuradas.
+2.  **Extracción Cerrada:** En este paradigma, se define la Ontología (clases, atributos y tipos de relaciones) antes de la ejecución del modelo. Esta estructura predefinida se inyecta en los requerimientos o ajustes del sistema, estableciendo límites en el razonamiento del LLM.
+
+Bajo el paradigma de extracción cerrada, el modelo actúa estrictamente como un mapeador de funciones. Su tarea es identificar instancias reales en texto no estructurado y ajustarlas dentro de las estructuras lógicas ya definidas en lugar de descubrir cómo funciona el dominio.
+
+De esta forma, la ontología actúa como un "molde", asegurando que el grafo de conocimiento resultante posea una estructura canónica, determinista y matemáticamente predecible (Ehrlinger y Wöß, 2016).
+
+Esto dota al LLM de un contexto estructurado y explícitamente definido, lo que incrementa su precisión al momento de generar una respuesta, además permite rastrear la procedencia exacta de cada afirmación.
 
 ---
 
 #### Temas Pendientes por Desarrollar:
-*   Agentes
-*   Ontologías
 *   Tecnologías a utilizar
 
 #### Referencias
@@ -302,3 +357,9 @@ El objetivo es recuperar únicamente los fragmentos de información relevantes p
 *   https://arxiv.org/pdf/2302.13971 (Touvron, H., Lavril, T., Izacard, G., Martinet, X., et al. (2023). Llama: Open and efficient foundation language models. arXiv preprint arXiv:2302.13971.)
 *   https://proceedings.neurips.cc/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf (Lewis, P., Perez, E., Piktus, A., Petroni, F., Karpukhin, V., Goyal, N., ... & Kiela, D. (2020). Retrieval-augmented generation for knowledge-intensive NLP tasks. En Advances in Neural Information Processing Systems (Vol. 33, pp. 9459-9474).)
 *   https://www.mpgcamb.com/wp-content/uploads/2024/12/Abraham-Silberschatz-Henry-F.-Korth-S.-Sudarshan-Database-System-Concepts-McGraw-Hill-Education-2019.pdf (Silberschatz, A., Korth, H. F., & Sudarshan, S. (2020). Database system concepts (7ma ed.). McGraw-Hill Education.)
+*   https://arxiv.org/pdf/2308.11432 (Wang, L., Ma, C., Feng, X., Zhang, Z., Yang, H., Zhang, J., ... & Wen, J. R. (2023). A survey on large language model based autonomous agents. arXiv preprint arXiv:2308.11432.)
+*   https://arxiv.org/pdf/2312.10997 (Gao, Y., Xiong, Y., Gao, X., Jia, K., Pan, J., Bi, Y., ... & Wang, H. (2023). Retrieval-augmented generation for large language models: A survey. arXiv preprint arXiv:2312.10997.)
+*   http://lib.ysu.am/disciplines_bk/efdd4d1d4c2087fe1cbe03d9ced67f34.pdf (Russell, S. J., & Norvig, P. (2020). Artificial intelligence: a modern approach (4ta ed.). Pearson.)
+*   Studer, R., Benjamins, V. R., & Fensel, D. (1998). Knowledge engineering: principles and methods. Data & knowledge engineering, 25(1-2), 161-197.
+*   https://ceur-ws.org/Vol-1695/paper4.pdf (Ehrlinger, L., & Wöß, W. (2016). Towards a definition of knowledge graphs.)
+*   https://ojs.aaai.org/aimagazine/index.php/aimagazine/article/view/1029 (Randall Davis; Howard Shrobe; Peter Szolovits (1993). What Is a Knowledge Representation?. Association for the Advancement of Artificial Intelligence)
