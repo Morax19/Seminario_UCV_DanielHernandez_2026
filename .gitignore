@@ -1,0 +1,7 @@
+# Documentos de Word (el contenido fuente vive en los .md)
+*.docx
+*.doc
+*.docm
+
+# Archivos temporales que genera Word al editar
+~$*
